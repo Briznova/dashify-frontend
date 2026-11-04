@@ -37,7 +37,8 @@ Allow the frontend dev origin (`http://localhost:5173`) in NestJS CORS configura
 ## OpenAPI limitations
 The uploaded OpenAPI file specifies request DTOs and routes but most response schemas are blank. This UI therefore assumes common JSON response shapes and normalizes arrays in a defensive way. In particular:
 - `GET /classes` is expected to return class records with nested `sections`.
-- Student list data should include `sectionId` or enrolments with `sectionId` for attendance roster matching.
+- `GET /students` returns `{ data, meta }`; each student has an `enrolments` array. Enrolments contain `academicYear`, `section` (with nested `class`), `isActive`, `startDate` and optional `endDate`. The student-level `admissionNumber` and `admissionDate` remain separate fields.
+- Student detail guardians are join records with guardian details nested under `guardian`. Attendance roster matching uses active enrolments whose start/end dates include the session date.
 - Login and active-school responses should include `accessToken`; refresh token is optional.
 If your live API returns different shapes, adjust the response mapping in `src/api.ts` and the relevant pages. No fees/finance features are included because they are absent from the supplied API contract.
 
